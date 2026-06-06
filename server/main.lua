@@ -1,0 +1,34 @@
+local QBCore = exports['qb-core']:GetCoreObject({ 'Functions' })
+
+QBCore.Functions.CreateCallback('qb-scoreboard:server:GetScoreboardData', function(_, cb)
+    local totalPlayers = 0
+    local policeCount = 0
+    local players = {}
+    local jobCounts = {}
+
+    for jobKey, _ in pairs(Config.jobs) do
+        jobCounts[jobKey] = 0
+    end
+
+    for _, v in pairs(QBCore.Functions.GetQBPlayers()) do
+        if v then
+            totalPlayers += 1
+            if v.PlayerData.job.name == 'police' and v.PlayerData.job.onduty then
+                policeCount += 1
+            end
+            local jobName = v.PlayerData.job.name
+            if jobName and jobCounts[jobName] ~= nil then
+                jobCounts[jobName] += 1
+            end
+            players[v.PlayerData.source] = {}
+            players[v.PlayerData.source].optin = QBCore.Functions.IsOptin(v.PlayerData.source)
+        end
+    end
+
+    cb(totalPlayers, policeCount, players, jobCounts)
+end)
+
+RegisterNetEvent('qb-scoreboard:server:SetActivityBusy', function(activity, bool)
+    Config.IllegalActions[activity].busy = bool
+    TriggerClientEvent('qb-scoreboard:client:SetActivityBusy', -1, activity, bool)
+end)
