@@ -1,4 +1,4 @@
-# Code-Crafting for QB-Core (UI Created by [BLDR](https://bldr.chat/))
+# Code-Scoreboard for QB-Core (UI Created by [BLDR](https://bldr.chat/))
 
 ![Scoreboard Preview](preview.png)
 
